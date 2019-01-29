@@ -23,3 +23,35 @@ to add features
     create output folder, add time stamp on output file
     create a log file for the program
     create another pivot talbe for each sheet on excel, calculate duty vat etc
+
+
+29/01/2019
+  revised version according to new template, file name SplitInvoiceGui_newTemplate.py
+
+  pre processing steps (need to be done before running the program)
+
+  a. delete unwanted lines at the end of excel file
+  b. unmerge 'Marks & No' column and refill the value, unmerge 'CTN' column but don't fill the value. use below VBA CODE
+
+                  Sub UnMergeFill()
+
+                  Dim cell As Range, joinedCells As Range, wsh As Worksheet
+
+                      For Each wsh In ThisWorkbook.Worksheets
+                          For Each cell In wsh.UsedRange
+                              If Not cell.Column = 17 Then   'ignore column Q
+                                  If cell.MergeCells Then
+                                      Set joinedCells = cell.MergeArea
+                                      cell.MergeCells = False
+                                      joinedCells.Value = cell.Value
+                                  End If
+                              Else   'if in column Q, do unmerge only
+                                  If cell.MergeCells Then
+                                      Set joinedCells = cell.MergeArea
+                                      cell.MergeCells = False
+                                  End If
+                              End If
+                          Next
+                      Next
+
+                  End Sub
